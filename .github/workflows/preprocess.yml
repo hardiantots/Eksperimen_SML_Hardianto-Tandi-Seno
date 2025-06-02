@@ -25,7 +25,7 @@ jobs:
       run: pip install pandas scikit-learn
 
     - name: Run preprocessing script
-      run: python preprocessing/automate_Hardianto Tandi Seno.py
+      run: python "preprocessing/automate_Hardianto Tandi Seno.py"
 
     - name: Commit and push result
       run: |
