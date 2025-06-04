@@ -19,13 +19,12 @@ def preprocess_and_manual_split(input_path, output_folder, split_ratio=0.9):
 
     drop_columns = ['ID', 'ZIP Code', 'Experience']
     df = df.drop(columns=[col for col in drop_columns if col in df.columns])
-    print("Pra-pemrosesan awal (menghapus kolom dan memperbaiki 'Experience') selesai.")
+    print("Pra-pemrosesan awal selesai.")
 
     df_shuffled = df.sample(frac=1, random_state=42).reset_index(drop=True)
-    print("Data telah diacak secara acak.")
+    print("Data telah diacak.")
 
     split_index = int(len(df_shuffled) * split_ratio)
-
     train_df = df_shuffled.iloc[:split_index]
     test_df = df_shuffled.iloc[split_index:]
     print(f"Data dibagi menjadi {len(train_df)} baris untuk pelatihan dan {len(test_df)} baris untuk pengujian.")
@@ -39,8 +38,13 @@ def preprocess_and_manual_split(input_path, output_folder, split_ratio=0.9):
 
     train_df[available_features] = scaler.fit_transform(train_df[available_features])
     test_df[available_features] = scaler.transform(test_df[available_features])
-    print("Scaling fitur telah diterapkan pada set pelatihan dan pengujian.")
+    print("Scaling fitur telah diterapkan.")
 
+    if 'Personal Loan' in test_df.columns:
+        test_df = test_df.drop(columns=['Personal Loan'])
+        print("Kolom 'Personal Loan' telah dihapus dari data uji.")
+    
+    # Tentukan path output
     output_train_path = os.path.join(output_folder, "Bank_Personal_Loan_preprocessing.csv")
     output_test_path = os.path.join(output_folder, "Bank_Personal_Loan_test.csv")
 
@@ -51,12 +55,9 @@ def preprocess_and_manual_split(input_path, output_folder, split_ratio=0.9):
     test_df.to_csv(output_test_path, index=False)
     print(f"✅ File data uji disimpan di: {output_test_path}")
 
-
 # Blok utama untuk menjalankan skrip
 if __name__ == "__main__":
-    # Konfigurasi nama file dan folder
     INPUT_CSV_FILE = "Bank_Personal_Loan.csv"
-    OUTPUT_FOLDER_NAME = "Bank_Personal_Loan"
+    OUTPUT_FOLDER_NAME = "preprocessing/Bank_Personal_Loan"
     
-    # Panggil fungsi utama
     preprocess_and_manual_split(INPUT_CSV_FILE, OUTPUT_FOLDER_NAME)
