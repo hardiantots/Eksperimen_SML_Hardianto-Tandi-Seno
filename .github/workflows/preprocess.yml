@@ -33,6 +33,6 @@ jobs:
       run: |
         git config --global user.email "github-actions@github.com"
         git config --global user.name "github-actions"
-        git add preprocessing/Bank_Personal_Loan_preprocessing.csv
-        git commit -m "Auto-update preprocessed dataset" || echo "No changes to commit"
+        git add Bank_Personal_Loan/
+        git commit -m "Auto-update preprocessed and split datasets" || echo "No changes to commit"
         git push
